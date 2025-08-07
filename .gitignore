@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+*.env
+venv/
+# Docker
+.docker/
+docker-compose.override.yml
+# Logs
+*.log
+# MAC
+__MACOSX
