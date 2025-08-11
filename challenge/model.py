@@ -17,7 +17,6 @@ from google.cloud import storage
 
 
 SERVICE_ACCOUNT_JSON = "../keys/latam-challenge-468711-bb18e10af3de.json"  
-#SERVICE_ACCOUNT_JSON = "/home/carlos/Documents/TryoLabs/LATAM/keys/latam-challenge-468711-bb18e10af3de.json"  
 GCS_BUCKET_NAME = "ml-model-latam"               
 GCS_BLOB_PATH = "models/logreg_v1.pkl"         
 GCP_LOCATION = "us-east1"                   
