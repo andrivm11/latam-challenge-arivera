@@ -203,4 +203,12 @@ class DelayModel:
             (List[int]): predicted targets.
         """
         
-        return
+        if self._model is None:
+            downloaded_bytes = self.blob.download_as_bytes()
+            self._model = cloudpickle.loads(downloaded_bytes)
+        
+        y_hat=self._model.predict(features)
+        
+        return y_hat.tolist()
+
+        
