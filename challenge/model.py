@@ -16,7 +16,7 @@ from google.cloud import storage
 
 
 
-SERVICE_ACCOUNT_JSON = "../keys/latam-challenge-468711-bb18e10af3de.json"  
+#SERVICE_ACCOUNT_JSON = "../keys/latam-challenge-468711-bb18e10af3de.json"  
 GCS_BUCKET_NAME = "ml-model-latam"               
 GCS_BLOB_PATH = "models/logreg_v1.pkl"         
 GCP_LOCATION = "us-east1"                   
@@ -126,7 +126,8 @@ class DelayModel:
         self
     ):
         self._model = None # Model should be saved in this attribute.
-        self.client = storage.Client.from_service_account_json(SERVICE_ACCOUNT_JSON)
+        #self.client = storage.Client.from_service_account_json(SERVICE_ACCOUNT_JSON)
+        self.client = storage.Client()
         self.bucket = self.client.bucket(GCS_BUCKET_NAME)
         self.blob = self.bucket.blob(GCS_BLOB_PATH)
         
