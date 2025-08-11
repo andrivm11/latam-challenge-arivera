@@ -8,6 +8,18 @@ from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 from sklearn.metrics import confusion_matrix, classification_report
 
+from sklearn.linear_model import LogisticRegression
+
+import cloudpickle
+
+from google.cloud import storage
+
+
+
+SERVICE_ACCOUNT_JSON = "../../keys/latam-challenge-468711-bb18e10af3de.json"  
+GCS_BUCKET_NAME = "ml-model-latam"               
+GCS_BLOB_PATH = "models/logreg_v1.pkl"         
+GCP_LOCATION = "us-east1"                   
 
 class LatamFeatureEngineer:
 
@@ -114,6 +126,9 @@ class DelayModel:
         self
     ):
         self._model = None # Model should be saved in this attribute.
+        self.client = storage.Client.from_service_account_json(SERVICE_ACCOUNT_JSON)
+        self.bucket = self.client.bucket(GCS_BUCKET_NAME)
+        self.blob = self.bucket.blob(GCS_BLOB_PATH)
         
 
     def preprocess(
@@ -159,7 +174,20 @@ class DelayModel:
             features (pd.DataFrame): preprocessed data.
             target (pd.DataFrame): target.
         """
-        return
+        
+
+        n_y0 = len(target[target.iloc[:, 0] == 0])
+        n_y1 = len(target[target.iloc[:, 0] == 1])
+        
+        reg_model_2 = LogisticRegression(class_weight={1: n_y0/len(target), 0: n_y1/len(target)})
+        reg_model_2.fit(features, target)
+
+        self._model = reg_model_2
+        
+        serialized_bytes = cloudpickle.dumps(self._model) 
+        self.blob.upload_from_string(serialized_bytes, content_type="application/octet-stream")
+        
+        return None
 
     def predict(
         self,
@@ -174,4 +202,5 @@ class DelayModel:
         Returns:
             (List[int]): predicted targets.
         """
+        
         return
