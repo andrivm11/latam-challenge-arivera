@@ -1,7 +1,4 @@
-
-
 name: Continuous Deployment (CD)
-
 
 on:
   workflow_dispatch:
@@ -15,11 +12,14 @@ env:
   REPO_NAME: latam-repo           
   SERVICE_NAME: prediction-service 
 
-
 jobs:
   build-and-deploy:
     name: Build and Deploy to Cloud Run
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
 
     steps:
       - name: Checkout Code
@@ -49,8 +49,8 @@ jobs:
           service: ${{ env.SERVICE_NAME }}
           region: ${{ env.REGION }}
           image: ${{ steps.build-push.outputs.image_url }}
-          service_account: salatam@${{ env.PROJECT_ID }}.iam.gserviceaccount.com 
 
+          service_account: 'salatam@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
 
       - name: Show Deployed URL
         run: echo "Service deployed to: ${{ steps.deploy.outputs.url }}"
