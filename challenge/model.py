@@ -86,15 +86,8 @@ class LatamFeatureEngineer:
         return min_diff
     
     def transform(self, data: pd.DataFrame, target_column: str=None) -> Tuple[pd.DataFrame, pd.DataFrame]:
-        data['period_day'] = data['Fecha-I'].apply(self.get_period_day)
         
-        data['high_season'] = data['Fecha-I'].apply(self.is_high_season)
-        
-        data['min_diff'] = data.apply(self.get_min_diff, axis = 1)
-        
-        threshold_in_minutes = 15
-        data['delay'] = np.where(data['min_diff'] > threshold_in_minutes, 1, 0)
-        
+ 
         features = pd.concat([
             pd.get_dummies(data['OPERA'], prefix = 'OPERA'),
             pd.get_dummies(data['TIPOVUELO'], prefix = 'TIPOVUELO'),
@@ -102,12 +95,24 @@ class LatamFeatureEngineer:
             axis = 1
             )
 	
-	
+        
+        for column in self._top_10_features:
+            if column not in features.columns:
+                features[column] = False
+       	
         features = features[self._top_10_features]
 	
         if target_column is None:
             return features, None
         else:
+            data['period_day'] = data['Fecha-I'].apply(self.get_period_day)
+        
+            data['high_season'] = data['Fecha-I'].apply(self.is_high_season)
+        
+            data['min_diff'] = data.apply(self.get_min_diff, axis = 1)
+        
+            threshold_in_minutes = 15
+            data['delay'] = np.where(data['min_diff'] > threshold_in_minutes, 1, 0)
             target = data[target_column]
             return features, target
 	
