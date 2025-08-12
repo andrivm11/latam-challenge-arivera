@@ -50,6 +50,16 @@ jobs:
           region: ${{ env.REGION }}
           image: ${{ steps.build-push.outputs.image_url }}
           service_account: salatam@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
-          
-      
+
+      # Opción A: si el action 'deploy-cloudrun' expone outputs.url
+      - name: Show Deployed URL (from action output)
+        if: ${{ steps.deploy.outputs.url != '' }}
+        run: echo "Service deployed to: ${{ steps.deploy.outputs.url }}"
+
+      # Opción B (fallback): obtener la URL con gcloud si la acción no expone outputs.url
+      - name: Show Deployed URL (fallback via gcloud)
+        if: ${{ steps.deploy.outputs.url == '' }}
+        run: |
+          SERVICE_URL=$(gcloud run services describe "${{ env.SERVICE_NAME }}" --region "${{ env.REGION }}" --format='value(status.url)')
+          echo "Service deployed to: $SERVICE_URL"
 
