@@ -52,5 +52,5 @@ jobs:
 
           service_account: 'salatam@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
 
-      - name: Show Deployed URL
-        run: echo "Service deployed to: ${{ steps.deploy.outputs.url }}"
+#      - name: Show Deployed URL
+#        run: echo "Service deployed to: ${{ steps.deploy.outputs.url }}"
