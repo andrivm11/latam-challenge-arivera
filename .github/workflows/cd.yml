@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - develop
 
 env:
   PROJECT_ID: latam-challenge-468711
