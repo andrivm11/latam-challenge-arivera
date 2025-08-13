@@ -1,5 +1,11 @@
-locust~=1.6
+#locust~=1.6
+locust==2.38.1
 coverage~=5.5
 pytest~=6.2.5
 pytest-cov~=2.12.1
 mockito~=1.2.2
+fastapi==0.116.1
+httpcore==1.0.9
+httpx==0.28.1
+starlette==0.47.2
+flake8==7.3.0

@@ -10,3 +10,5 @@ docker-compose.override.yml
 *.log
 # MAC
 __MACOSX
+# test
+.coverage
